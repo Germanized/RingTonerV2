@@ -1,3 +1,12 @@
+/**
+ * @name RingTonerV2
+ * @author Germanized
+ * @description Allows you to change any of your ringtones to Halloween-themed ones, even if you don't have Discord Nitro.
+ * @version 1.0.0
+ * @source https://github.com/Germanized/RingTonerV2
+ * @updateUrl https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js
+ */
+
 const config = {
     "info": {
         "name": "RingTonerV2",
