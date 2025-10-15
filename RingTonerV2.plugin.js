@@ -104,19 +104,15 @@ module.exports = !global.ZeresPluginLibrary ? class {
                     value: r.url
                 }))];
 
-                return (
-                    <SettingGroup>
-                        <Dropdown
-                            value={this.settings.ringtone}
-                            options={ringtones}
-                            onChange={(value) => {
-                                this.settings.ringtone = value;
-                                this.saveSettings();
-                            }}
-                        >
-                            Ringtone
-                        </Dropdown>
-                    </SettingGroup>
+                return BdApi.React.createElement(SettingGroup, null,
+                    BdApi.React.createElement(Dropdown, {
+                        value: this.settings.ringtone,
+                        options: ringtones,
+                        onChange: (value) => {
+                            this.settings.ringtone = value;
+                            this.saveSettings();
+                        }
+                    }, "Ringtone")
                 );
             }
 
