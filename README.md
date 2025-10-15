@@ -14,8 +14,10 @@ A [BetterDiscord](https://betterdiscord.app/) plugin that allows you to change y
 
 ## Installation
 
+**Note:** You only need to download the single `RingTonerV2.plugin.js` file. The ringtones are streamed directly from the GitHub repository, so you do **not** need to download the `ringtones` folder.
+
 1.  **Download the Plugin:**
-    -   Click [here](https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js) to download the `RingTonerV2.plugin.js` file.
+    -   Right-click [here](https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js) and select `Save As...` to download the `RingTonerV2.plugin.js` file.
 2.  **Open the BetterDiscord Plugins Folder:**
     -   In Discord, go to `User Settings` > `Plugins` (under the BetterDiscord section).
     -   Click the `Open Plugins Folder` button.
