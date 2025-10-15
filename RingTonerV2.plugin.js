@@ -2,7 +2,7 @@
  * @name RingTonerV2
  * @author Germanized
  * @description Allows you to change your ringtones to custom holiday-themed ones, even if you don't have Discord Nitro.
- * @version 1.2.0
+ * @version 1.3.0
  * @source https://github.com/Germanized/RingTonerV2
  * @updateUrl https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js
  */
@@ -13,17 +13,18 @@ const config = {
         "authors": [{
             "name": "Germanized"
         }],
-        "version": "1.2.0",
+        "version": "1.3.0",
         "description": "Allows you to change your ringtones to custom holiday-themed ones, even if you don't have Discord Nitro.",
         "github": "https://github.com/Germanized/RingTonerV2",
         "github_raw": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js"
     },
     "changelog": [{
-        "title": "Complete Rewrite!",
-        "type": "improved",
+        "title": "Modernization & Fixes",
+        "type": "fixed",
         "items": [
-            "The plugin has been rewritten from the ground up to be more stable.",
-            "Removed dependency on ZeresPluginLibrary, so it should now load for all users without issues."
+            "The settings menu now uses a modern, native-looking Discord UI.",
+            "Fixed a critical bug where custom ringtones would not play for incoming calls.",
+            "Improved patching logic for better stability."
         ]
     }],
     "ringtones": [{
@@ -64,7 +65,8 @@ const config = {
 module.exports = class RingTonerV2 {
     constructor() {
         this.settings = {};
-        this.audioModule = null;
+        this.audio = null;
+        this.soundIDs = ["ring", "call_calling", "call_ringing", "call_ringing_beat"];
     }
 
     getName() { return config.info.name; }
@@ -82,66 +84,77 @@ module.exports = class RingTonerV2 {
 
     stop() {
         BdApi.Patcher.unpatchAll(this.getName());
+        if (this.audio) {
+            this.audio.pause();
+            this.audio.src = "";
+            this.audio = null;
+        }
     }
 
     patch() {
-        const AudioResolver = BdApi.Webpack.getModule(m => m.exports?.playSound);
-        if (AudioResolver) {
-            BdApi.Patcher.instead(this.getName(), AudioResolver.exports, "playSound", (_, [type, volume], original) => {
-                if (this.settings.ringtone !== "default" && type === "ring") {
-                    const audio = new Audio(this.settings.ringtone);
-                    audio.volume = volume;
-                    audio.play().catch(e => console.error(`${this.getName()}: Could not play audio.`, e));
-                } else {
-                    return original(type, volume);
+        const AudioModule = BdApi.Webpack.getModule(m => m.exports?.createSound);
+        if (AudioModule) {
+            BdApi.Patcher.after(this.getName(), AudioModule.exports, "createSound", (_, [type], res) => {
+                if (this.settings.ringtone !== "default" && this.soundIDs.includes(type)) {
+                    res.src = this.settings.ringtone;
+                    this.audio = res;
                 }
             });
         }
     }
 
     getSettingsPanel() {
-        const panel = document.createElement("div");
-        panel.style.padding = "10px";
+        const Select = BdApi.Webpack.getModule(m => m.SingleSelect && !m.ClearableSingleSelect);
+        const {
+            React
+        } = BdApi;
 
-        const label = document.createElement("h3");
-        label.textContent = "Select a Ringtone";
-        panel.appendChild(label);
+        const options = [{
+            label: "Default",
+            value: "default"
+        }];
 
-        const select = document.createElement("select");
-        select.style.width = "100%";
-        select.onchange = () => {
-            this.settings.ringtone = select.value;
-            BdApi.Data.save(this.getName(), "settings", this.settings);
-        };
-
-        const ringtones = [{
-            category: "Default",
-            name: "Default",
-            url: "default"
-        }, ...config.ringtones];
-
-        const groupedRingtones = ringtones.reduce((acc, r) => {
+        const groupedRingtones = config.ringtones.reduce((acc, r) => {
             if (!acc[r.category]) acc[r.category] = [];
-            acc[r.category].push(r);
+            acc[r.category].push({
+                label: r.name,
+                value: r.url
+            });
             return acc;
         }, {});
 
         for (const category in groupedRingtones) {
-            const optgroup = document.createElement("optgroup");
-            optgroup.label = category;
-            for (const ringtone of groupedRingtones[category]) {
-                const option = document.createElement("option");
-                option.value = ringtone.url;
-                option.textContent = ringtone.name;
-                if (this.settings.ringtone === ringtone.url) {
-                    option.selected = true;
-                }
-                optgroup.appendChild(option);
-            }
-            select.appendChild(optgroup);
+            options.push({
+                label: category,
+                options: groupedRingtones[category]
+            });
         }
 
-        panel.appendChild(select);
-        return panel;
+        const SettingsPanel = (props) => {
+            const [currentRingtone, setRingtone] = React.useState(this.settings.ringtone);
+            return React.createElement("div", {
+                    style: {
+                        padding: "10px"
+                    }
+                },
+                React.createElement("h3", {
+                    style: {
+                        color: "var(--header-primary)",
+                        marginBottom: "10px"
+                    }
+                }, "Select a Ringtone"),
+                React.createElement(Select.SingleSelect, {
+                    value: currentRingtone,
+                    options: options,
+                    onChange: (value) => {
+                        this.settings.ringtone = value;
+                        BdApi.Data.save(this.getName(), "settings", this.settings);
+                        setRingtone(value);
+                    }
+                })
+            );
+        };
+
+        return React.createElement(SettingsPanel);
     }
 };
