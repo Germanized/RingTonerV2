@@ -1,0 +1,41 @@
+{
+    "name": "RingTonerV2",
+    "author": "Germanized",
+    "description": "Allows you to change any of your ringtones to Halloween-themed ones, even if you don't have Discord Nitro.",
+    "version": "1.0.0",
+    "source": "https://github.com/Germanized/RingTonerV2",
+    "ringtones": [
+        {
+            "name": "Discord Christmas Past 2023",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Christmas_Past_2023.mp3"
+        },
+        {
+            "name": "Discord Halloween Ringtone 2020",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Halloween_Ringtone_2020.mp3"
+        },
+        {
+            "name": "Discord Halloween Ringtone 2024",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Halloween_Ringtone_2024.mp3"
+        },
+        {
+            "name": "Discord Rare Ringtone",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Rare_Ringtone.mp3"
+        },
+        {
+            "name": "Discord Spooky Ringtone 2022 V1",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Spooky_Ringtone_2022_V1.mp3"
+        },
+        {
+            "name": "Discord Spooky Ringtone 2022 V2",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Spooky_Ringtone_2022_V2.mp3"
+        },
+        {
+            "name": "Discord Spooky Ringtone 2023",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Spooky_Ringtone_2023.mp3"
+        },
+        {
+            "name": "Discord Xmas 2024",
+            "url": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/ringtones/Discord_Xmas_2024.mp3"
+        }
+    ]
+}
