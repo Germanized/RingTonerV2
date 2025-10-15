@@ -1,18 +1,15 @@
-# 🎃 RingTonerV2 🎃
+# 🎵 RingTonerV2 🎵
 
-A [BetterDiscord](https://betterdiscord.app/) plugin that allows you to change your Discord ringtones to custom ones, with a spooky Halloween theme! Works even if you don't have Discord Nitro.
-
+A [BetterDiscord](https://betterdiscord.app/) plugin that allows you to change your Discord ringtones to custom ones, with themes for various holidays! Works even if you don't have Discord Nitro.
 
 ## Features
 
--   **Custom Ringtones:** Choose from a selection of Halloween-themed ringtones.
+-   **Custom Ringtones:** Choose from a selection of holiday-themed ringtones (Halloween, Christmas, and more).
 -   **Nitro Not Required:** Enjoy custom ringtones without a Discord Nitro subscription.
 -   **Easy to Use:** A simple settings panel integrated into your Discord settings.
--   **Spooky Vibes:** Get into the Halloween spirit with spooky sounds!
+-   **Standalone:** No longer requires any external libraries to function.
 
 ## Installation
-
-**Note:** You only need to download the single `RingTonerV2.plugin.js` file. The ringtones are streamed directly from the GitHub repository, so you do **not** need to download the `ringtones` folder.
 
 1.  **Download the Plugin:**
     -   Right-click [here](https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js) and select `Save As...` to download the `RingTonerV2.plugin.js` file.
