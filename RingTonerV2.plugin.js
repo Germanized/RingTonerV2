@@ -2,7 +2,7 @@
  * @name RingTonerV2
  * @author Germanized
  * @description Allows you to change your ringtones to custom holiday-themed ones, even if you don't have Discord Nitro.
- * @version 1.3.0
+ * @version 1.3.1
  * @source https://github.com/Germanized/RingTonerV2
  * @updateUrl https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js
  */
@@ -13,18 +13,16 @@ const config = {
         "authors": [{
             "name": "Germanized"
         }],
-        "version": "1.3.0",
+        "version": "1.3.1",
         "description": "Allows you to change your ringtones to custom holiday-themed ones, even if you don't have Discord Nitro.",
         "github": "https://github.com/Germanized/RingTonerV2",
         "github_raw": "https://raw.githubusercontent.com/Germanized/RingTonerV2/main/RingTonerV2.plugin.js"
     },
     "changelog": [{
-        "title": "Modernization & Fixes",
+        "title": "Critical Fix",
         "type": "fixed",
         "items": [
-            "The settings menu now uses a modern, native-looking Discord UI.",
-            "Fixed a critical bug where custom ringtones would not play for incoming calls.",
-            "Improved patching logic for better stability."
+            "Fixed a critical bug that caused the settings panel to crash with an 'unexpected error'."
         ]
     }],
     "ringtones": [{
@@ -104,10 +102,8 @@ module.exports = class RingTonerV2 {
     }
 
     getSettingsPanel() {
-        const Select = BdApi.Webpack.getModule(m => m.SingleSelect && !m.ClearableSingleSelect);
-        const {
-            React
-        } = BdApi;
+        const { React } = BdApi;
+        const Select = BdApi.Webpack.getModule(m => m.SingleSelect && !m.ClearableSingleSelect).SingleSelect;
 
         const options = [{
             label: "Default",
@@ -130,31 +126,33 @@ module.exports = class RingTonerV2 {
             });
         }
 
-        const SettingsPanel = (props) => {
-            const [currentRingtone, setRingtone] = React.useState(this.settings.ringtone);
-            return React.createElement("div", {
-                    style: {
-                        padding: "10px"
-                    }
-                },
-                React.createElement("h3", {
-                    style: {
-                        color: "var(--header-primary)",
-                        marginBottom: "10px"
-                    }
-                }, "Select a Ringtone"),
-                React.createElement(Select.SingleSelect, {
-                    value: currentRingtone,
-                    options: options,
-                    onChange: (value) => {
-                        this.settings.ringtone = value;
-                        BdApi.Data.save(this.getName(), "settings", this.settings);
-                        setRingtone(value);
-                    }
-                })
-            );
-        };
+        class SettingsPanel extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    ringtone: this.props.settings.ringtone
+                };
+                this.update = this.update.bind(this);
+            }
 
-        return React.createElement(SettingsPanel);
+            update(value) {
+                this.setState({ ringtone: value });
+                this.props.settings.ringtone = value;
+                BdApi.Data.save(config.info.name, "settings", this.props.settings);
+            }
+
+            render() {
+                return React.createElement("div", { style: { padding: "10px" } },
+                    React.createElement("h3", { style: { color: "var(--header-primary)", marginBottom: "10px" } }, "Select a Ringtone"),
+                    React.createElement(Select, {
+                        value: this.state.ringtone,
+                        options: options,
+                        onChange: this.update
+                    })
+                );
+            }
+        }
+
+        return React.createElement(SettingsPanel, { settings: this.settings });
     }
 };
