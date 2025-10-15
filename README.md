@@ -2,8 +2,6 @@
 
 A [BetterDiscord](https://betterdiscord.app/) plugin that allows you to change your Discord ringtones to custom ones, with a spooky Halloween theme! Works even if you don't have Discord Nitro.
 
-![Preview](https://i.imgur.com/your-preview-image.png)  
-*(Replace this with a screenshot of your plugin's settings panel)*
 
 ## Features
 
